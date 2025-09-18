@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Box,
   Container,
@@ -19,7 +19,6 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
-  ListItemSecondaryAction,
   Pagination,
   Select,
   FormControl,
@@ -43,7 +42,7 @@ import {
   Error as ErrorIcon,
   Schedule,
 } from '@mui/icons-material';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import apiService from '../services/apiService';
 import DocumentViewer from '../components/DocumentViewer';
 import toast from 'react-hot-toast';
@@ -141,7 +140,7 @@ const DocumentList = () => {
     return mockDocs.sort((a, b) => new Date(b.upload_timestamp) - new Date(a.upload_timestamp));
   };
 
-  const fetchDocuments = async () => {
+  const fetchDocuments = useCallback(async () => {
     try {
       // Always show mock documents for demo purposes
       const mockDocuments = generateMockDocuments();
@@ -154,11 +153,11 @@ const DocumentList = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchDocuments();
-  }, []);
+  }, [fetchDocuments]);
 
   useEffect(() => {
     const filterAndSortDocuments = () => {
