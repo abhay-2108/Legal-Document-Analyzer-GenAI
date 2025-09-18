@@ -146,13 +146,11 @@ const DocumentList = () => {
     try {
       // Always show mock documents for demo purposes
       const mockDocuments = generateMockDocuments();
-      console.log('Generated mock documents:', mockDocuments.length);
       setDocuments(mockDocuments);
     } catch (error) {
       console.error('Failed to fetch documents:', error);
       // Always create mock data for demo
       const mockDocuments = generateMockDocuments();
-      console.log('Generated fallback mock documents:', mockDocuments.length);
       setDocuments(mockDocuments);
     } finally {
       setLoading(false);
@@ -165,22 +163,13 @@ const DocumentList = () => {
 
   useEffect(() => {
     const filterAndSortDocuments = () => {
-      console.log('Filtering documents. Total documents:', documents.length);
-      console.log('Filter params:', { searchTerm, filterStatus, filterType, sortBy });
-      
       let filtered = documents.filter(doc => {
         const matchesSearch = doc.filename.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesStatus = filterStatus === 'all' || doc.status === filterStatus;
         const matchesType = filterType === 'all' || doc.filename.toLowerCase().includes(`.${filterType}`);
         
-        const matches = matchesSearch && matchesStatus && matchesType;
-        if (!matches) {
-          console.log('Document filtered out:', doc.filename, { matchesSearch, matchesStatus, matchesType });
-        }
-        return matches;
+        return matchesSearch && matchesStatus && matchesType;
       });
-
-      console.log('Filtered documents:', filtered.length);
 
       // Sort documents
       filtered.sort((a, b) => {
@@ -362,7 +351,7 @@ const DocumentList = () => {
         <Fade in timeout={800}>
           <Paper elevation={2} sx={{ p: 3, mb: 4, borderRadius: 3 }}>
             <Grid container spacing={3} alignItems="center">
-              <Grid item xs={12} md={4}>
+              <Grid size={{ xs: 12, md: 4 }}>
                 <TextField
                   fullWidth
                   placeholder="Search documents..."
@@ -383,7 +372,7 @@ const DocumentList = () => {
                 />
               </Grid>
               
-              <Grid item xs={12} md={2}>
+              <Grid size={{ xs: 12, md: 2 }}>
                 <FormControl fullWidth>
                   <InputLabel>Status</InputLabel>
                   <Select
@@ -401,7 +390,7 @@ const DocumentList = () => {
                 </FormControl>
               </Grid>
               
-              <Grid item xs={12} md={2}>
+              <Grid size={{ xs: 12, md: 2 }}>
                 <FormControl fullWidth>
                   <InputLabel>Type</InputLabel>
                   <Select
@@ -420,7 +409,7 @@ const DocumentList = () => {
                 </FormControl>
               </Grid>
               
-              <Grid item xs={12} md={2}>
+              <Grid size={{ xs: 12, md: 2 }}>
                 <FormControl fullWidth>
                   <InputLabel>Sort By</InputLabel>
                   <Select
@@ -436,7 +425,7 @@ const DocumentList = () => {
                 </FormControl>
               </Grid>
               
-              <Grid item xs={12} md={2}>
+              <Grid size={{ xs: 12, md: 2 }}>
                 <Typography variant="body2" color="textSecondary" align="center">
                   {filteredDocuments.length} of {documents.length} documents
                 </Typography>
@@ -446,7 +435,6 @@ const DocumentList = () => {
         </Fade>
 
         {/* Documents List */}
-        {console.log('Rendering - documents:', documents.length, 'filtered:', filteredDocuments.length, 'loading:', loading)}
         
         {/* Simple Fallback - Always show documents if they exist */}
         {documents.length > 0 && (
@@ -500,9 +488,9 @@ const DocumentList = () => {
                     }
                     secondary={
                       <Box>
-                        <Typography variant="body2" color="textSecondary" sx={{ mb: 1 }}>
+                        <Box component="span" sx={{ display: 'block', mb: 1, color: 'text.secondary', fontSize: '0.875rem' }}>
                           {formatFileSize(document.file_size)} • Uploaded {formatDate(document.upload_timestamp)}
-                        </Typography>
+                        </Box>
                         
                         {document.analysis_results && (
                           <Box display="flex" gap={1} flexWrap="wrap">
