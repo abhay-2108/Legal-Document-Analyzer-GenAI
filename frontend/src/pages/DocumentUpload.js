@@ -48,9 +48,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import apiService from '../services/apiService';
 import toast from 'react-hot-toast';
 
-const MotionBox = motion(Box);
-const MotionPaper = motion(Paper);
-const MotionCard = motion(Card);
+const MotionBox = motion.create(Box);
+const MotionPaper = motion.create(Paper);
+const MotionCard = motion.create(Card);
 
 const DocumentUpload = () => {
   const theme = useTheme();

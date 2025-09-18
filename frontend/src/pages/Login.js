@@ -30,8 +30,8 @@ import { useAuth } from '../context/AuthContext';
 import { Navigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
-const MotionBox = motion(Box);
-const MotionPaper = motion(Paper);
+const MotionBox = motion.create(Box);
+const MotionPaper = motion.create(Paper);
 
 const Login = () => {
   const { login, isAuthenticated, loading } = useAuth();

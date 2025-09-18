@@ -56,8 +56,8 @@ import { useNavigate } from 'react-router-dom';
 import apiService from '../services/apiService';
 import toast from 'react-hot-toast';
 
-const MotionCard = motion(Card);
-const MotionBox = motion(Box);
+const MotionCard = motion.create(Card);
+const MotionBox = motion.create(Box);
 
 const Dashboard = () => {
   const navigate = useNavigate();

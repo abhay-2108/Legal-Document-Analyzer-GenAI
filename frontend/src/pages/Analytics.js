@@ -50,8 +50,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import apiService from '../services/apiService';
 import toast from 'react-hot-toast';
 
-const MotionCard = motion(Card);
-const MotionBox = motion(Box);
+const MotionCard = motion.create(Card);
+const MotionBox = motion.create(Box);
 
 const Analytics = () => {
   const theme = useTheme();

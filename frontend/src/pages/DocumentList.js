@@ -47,7 +47,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import apiService from '../services/apiService';
 import DocumentViewer from '../components/DocumentViewer';
 import toast from 'react-hot-toast';
-const MotionListItem = motion(ListItem);
+const MotionListItem = motion.create(ListItem);
 
 const DocumentList = () => {
   const [documents, setDocuments] = useState([]);
@@ -487,39 +487,41 @@ const DocumentList = () => {
                       </Box>
                     }
                     secondary={
-                      <Box>
-                        <Box component="span" sx={{ display: 'block', mb: 1, color: 'text.secondary', fontSize: '0.875rem' }}>
-                          {formatFileSize(document.file_size)} • Uploaded {formatDate(document.upload_timestamp)}
-                        </Box>
-                        
-                        {document.analysis_results && (
-                          <Box display="flex" gap={1} flexWrap="wrap">
-                            <Chip
-                              label={`${document.analysis_results.risk_level} Risk`}
-                              size="small"
-                              color={getRiskColor(document.analysis_results.risk_level)}
-                              variant="outlined"
-                            />
-                            <Chip
-                              label={`${document.analysis_results.confidence_score}% Confidence`}
-                              size="small"
-                              variant="outlined"
-                            />
-                            <Chip
-                              label={`${document.analysis_results.key_clauses} Clauses`}
-                              size="small"
-                              variant="outlined"
-                            />
-                            <Chip
-                              label={`${document.analysis_results.processing_time}min`}
-                              size="small"
-                              variant="outlined"
-                            />
-                          </Box>
-                        )}
-                      </Box>
+                      `${formatFileSize(document.file_size)} • Uploaded ${formatDate(document.upload_timestamp)}`
                     }
+                    secondaryTypographyProps={{
+                      component: 'span',
+                      variant: 'body2',
+                      color: 'textSecondary'
+                    }}
                   />
+                  
+                  {/* Analysis Results below ListItemText */}
+                  {document.analysis_results && (
+                    <Box sx={{ mt: 1, ml: 7, display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                      <Chip
+                        label={`${document.analysis_results.risk_level} Risk`}
+                        size="small"
+                        color={getRiskColor(document.analysis_results.risk_level)}
+                        variant="outlined"
+                      />
+                      <Chip
+                        label={`${document.analysis_results.confidence_score}% Confidence`}
+                        size="small"
+                        variant="outlined"
+                      />
+                      <Chip
+                        label={`${document.analysis_results.key_clauses} Clauses`}
+                        size="small"
+                        variant="outlined"
+                      />
+                      <Chip
+                        label={`${document.analysis_results.processing_time}min`}
+                        size="small"
+                        variant="outlined"
+                      />
+                    </Box>
+                  )}
                   
                   <ListItemSecondaryAction>
                     <Box display="flex" gap={1}>
