@@ -47,7 +47,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import apiService from '../services/apiService';
 import DocumentViewer from '../components/DocumentViewer';
 import toast from 'react-hot-toast';
-const MotionListItem = motion.create(ListItem);
 
 const DocumentList = () => {
   const [documents, setDocuments] = useState([]);
@@ -436,22 +435,19 @@ const DocumentList = () => {
 
         {/* Documents List */}
         
+        
         {/* Simple Fallback - Always show documents if they exist */}
-        {documents.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-          >
+        {filteredDocuments.length > 0 && (
+          <Box>
             <List>
-              {documents.slice((page - 1) * documentsPerPage, page * documentsPerPage).map((document, index) => (
-                <MotionListItem
+              {filteredDocuments.slice((page - 1) * documentsPerPage, page * documentsPerPage).map((document, index) => (
+                <ListItem
                   key={document.document_id}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.05 }}
                   sx={{
                     mb: 2,
+                    p: 2,
+                    pr: 20,
+                    position: 'relative',
                     borderRadius: 3,
                     bgcolor: 'background.paper',
                     border: '1px solid',
@@ -470,20 +466,39 @@ const DocumentList = () => {
                   
                   <ListItemText
                     primary={
-                      <Box display="flex" alignItems="center" gap={1} mb={1}>
-                        <Typography variant="subtitle1" fontWeight={600}>
-                          {document.filename}
-                        </Typography>
-                        <Chip
-                          label={document.status}
-                          size="small"
-                          color={getStatusColor(document.status)}
-                          icon={
-                            document.status === 'completed' ? <CheckCircle /> :
-                            document.status === 'processing' ? <Schedule /> :
-                            document.status === 'error' ? <ErrorIcon /> : null
-                          }
-                        />
+                      <Box>
+                        <Box display="flex" alignItems="flex-start" gap={2} mb={1}>
+                          <Typography variant="subtitle1" fontWeight={600} sx={{ flex: 1, pr: 2 }}>
+                            {document.filename}
+                          </Typography>
+                        </Box>
+                        
+                        {/* Analysis Results */}
+                        {document.analysis_results && (
+                          <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', mb: 1 }}>
+                            <Chip
+                              label={`${document.analysis_results.risk_level} Risk`}
+                              size="small"
+                              color={getRiskColor(document.analysis_results.risk_level)}
+                              variant="outlined"
+                            />
+                            <Chip
+                              label={`${document.analysis_results.confidence_score}% Confidence`}
+                              size="small"
+                              variant="outlined"
+                            />
+                            <Chip
+                              label={`${document.analysis_results.key_clauses} Clauses`}
+                              size="small"
+                              variant="outlined"
+                            />
+                            <Chip
+                              label={`${document.analysis_results.processing_time}min`}
+                              size="small"
+                              variant="outlined"
+                            />
+                          </Box>
+                        )}
                       </Box>
                     }
                     secondary={
@@ -496,35 +511,19 @@ const DocumentList = () => {
                     }}
                   />
                   
-                  {/* Analysis Results below ListItemText */}
-                  {document.analysis_results && (
-                    <Box sx={{ mt: 1, ml: 7, display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-                      <Chip
-                        label={`${document.analysis_results.risk_level} Risk`}
-                        size="small"
-                        color={getRiskColor(document.analysis_results.risk_level)}
-                        variant="outlined"
-                      />
-                      <Chip
-                        label={`${document.analysis_results.confidence_score}% Confidence`}
-                        size="small"
-                        variant="outlined"
-                      />
-                      <Chip
-                        label={`${document.analysis_results.key_clauses} Clauses`}
-                        size="small"
-                        variant="outlined"
-                      />
-                      <Chip
-                        label={`${document.analysis_results.processing_time}min`}
-                        size="small"
-                        variant="outlined"
-                      />
-                    </Box>
-                  )}
-                  
-                  <ListItemSecondaryAction>
-                    <Box display="flex" gap={1}>
+                  {/* Top row with status and actions */}
+                  <Box sx={{ position: 'absolute', top: 16, right: 16, display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <Chip
+                      label={document.status}
+                      size="small"
+                      color={getStatusColor(document.status)}
+                      icon={
+                        document.status === 'completed' ? <CheckCircle /> :
+                        document.status === 'processing' ? <Schedule /> :
+                        document.status === 'error' ? <ErrorIcon /> : null
+                      }
+                    />
+                    <Box display="flex" gap={0.5}>
                       <Tooltip title="View & Analyze Document">
                         <IconButton
                           size="small"
@@ -561,14 +560,37 @@ const DocumentList = () => {
                         </IconButton>
                       </Tooltip>
                     </Box>
-                  </ListItemSecondaryAction>
-                </MotionListItem>
+                  </Box>
+                </ListItem>
               ))}
             </List>
-          </motion.div>
+          </Box>
         )}
         
         {/* Show No Documents message if none exist */}
+        {filteredDocuments.length === 0 && documents.length > 0 && (
+          <Paper elevation={2} sx={{ p: 6, textAlign: 'center', borderRadius: 3 }}>
+            <Description sx={{ fontSize: 80, color: 'grey.400', mb: 2 }} />
+            <Typography variant="h6" color="textSecondary" gutterBottom>
+              No documents match your filters
+            </Typography>
+            <Typography color="textSecondary">
+              Try adjusting your search or filter criteria.
+            </Typography>
+            <Button
+              variant="outlined"
+              sx={{ mt: 3, borderRadius: 3 }}
+              onClick={() => {
+                setSearchTerm('');
+                setFilterStatus('all');
+              }}
+            >
+              Clear Filters
+            </Button>
+          </Paper>
+        )}
+        
+        {/* Show No Documents message if none exist at all */}
         {documents.length === 0 && (
           <Paper elevation={2} sx={{ p: 6, textAlign: 'center', borderRadius: 3 }}>
             <Description sx={{ fontSize: 80, color: 'grey.400', mb: 2 }} />
@@ -589,11 +611,11 @@ const DocumentList = () => {
         )}
 
         {/* Pagination */}
-        {documents.length > documentsPerPage && (
+        {filteredDocuments.length > documentsPerPage && (
           <Fade in timeout={1000}>
             <Box display="flex" justifyContent="center" mt={4}>
               <Pagination
-                count={Math.ceil(documents.length / documentsPerPage)}
+                count={Math.ceil(filteredDocuments.length / documentsPerPage)}
                 page={page}
                 onChange={(event, newPage) => setPage(newPage)}
                 color="primary"
