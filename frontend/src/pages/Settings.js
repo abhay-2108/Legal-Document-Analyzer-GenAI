@@ -11,7 +11,6 @@ import {
   FormControlLabel,
   TextField,
   Button,
-  Divider,
   Alert,
   Select,
   MenuItem,
@@ -29,13 +28,11 @@ import {
   FormHelperText,
   Skeleton,
   Fade,
-  Slide,
   CircularProgress,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
-  useTheme,
 } from '@mui/material';
 import {
   Security as SecurityIcon,
@@ -49,20 +46,16 @@ import {
   Warning as WarningIcon,
   Error as ErrorIcon,
   Info as InfoIcon,
-  Backup as BackupIcon,
   Shield as ShieldIcon,
   Speed as SpeedIcon,
   Cloud as CloudIcon,
-  Key as KeyIcon,
 } from '@mui/icons-material';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
 
 const MotionCard = motion.create(Card);
-const MotionBox = motion.create(Box);
 
 const Settings = () => {
-  const theme = useTheme();
   const [activeTab, setActiveTab] = useState(0);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -113,7 +106,7 @@ const Settings = () => {
       setOriginalSettings(JSON.parse(JSON.stringify(settings)));
       setLoading(false);
     }, 1000);
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     // Check if settings have changed

@@ -41,17 +41,14 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  LineChart,
-  Line,
   AreaChart,
   Area,
 } from 'recharts';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import apiService from '../services/apiService';
 import toast from 'react-hot-toast';
 
 const MotionCard = motion.create(Card);
-const MotionBox = motion.create(Box);
 
 const Analytics = () => {
   const theme = useTheme();
@@ -126,39 +123,6 @@ const Analytics = () => {
     toast.success('Analytics data refreshed!');
   };
 
-  const getSeverityColor = (severity) => {
-    switch (severity) {
-      case 'Critical':
-        return '#9c27b0';
-      case 'High':
-        return '#f44336';
-      case 'Medium':
-        return '#ff9800';
-      case 'Low':
-        return '#4caf50';
-      default:
-        return '#2196f3';
-    }
-  };
-
-  // Custom tooltip for charts
-  const CustomTooltip = ({ active, payload, label }) => {
-    if (active && payload && payload.length) {
-      return (
-        <Paper elevation={3} sx={{ p: 2, borderRadius: 2 }}>
-          <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
-            {label}
-          </Typography>
-          {payload.map((entry, index) => (
-            <Typography key={index} variant="body2" sx={{ color: entry.color }}>
-              {`${entry.name}: ${entry.value}${entry.unit || ''}`}
-            </Typography>
-          ))}
-        </Paper>
-      );
-    }
-    return null;
-  };
 
   if (loading) {
     return (

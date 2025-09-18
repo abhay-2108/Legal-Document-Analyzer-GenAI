@@ -12,7 +12,6 @@ import {
   Stepper,
   Step,
   StepLabel,
-  StepContent,
   Card,
   CardContent,
   List,
@@ -23,7 +22,6 @@ import {
   IconButton,
   Fade,
   Slide,
-  Collapse,
   CircularProgress,
   useTheme,
 } from '@mui/material';
@@ -32,12 +30,10 @@ import {
   Description,
   CheckCircle,
   Error,
-  Warning,
   Delete,
   Refresh,
   Security,
   Analytics,
-  Speed,
   Timeline,
   InsertDriveFile,
   PictureAsPdf,
@@ -68,11 +64,11 @@ const DocumentUpload = () => {
   
   // Check authentication on component mount
   useEffect(() => {
-    console.log('DocumentUpload - Auth status:', { isAuthenticated, user, hasToken: !!token });
+    console.log('DocumentUpload - Auth status:', { isAuthenticated, user: user.email, hasToken: !!token });
     if (!isAuthenticated) {
       console.warn('User not authenticated for upload');
     }
-  }, [isAuthenticated, user, token]);
+  }, [isAuthenticated, user.email, token]);
 
   const steps = [
     'Select Documents',
@@ -101,7 +97,7 @@ const DocumentUpload = () => {
     const k = 1024;
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`;
   };
 
   const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
@@ -293,11 +289,6 @@ const DocumentUpload = () => {
     setUploading(false);
   };
 
-  const getStepColor = (step) => {
-    if (step < currentStep) return 'success';
-    if (step === currentStep) return 'primary';
-    return 'default';
-  };
 
   return (
     <Container maxWidth="xl" sx={{ 
@@ -386,10 +377,10 @@ const DocumentUpload = () => {
                     isDragActive ? theme.palette.primary.main :
                     theme.palette.grey[300]
                   }`,
-                  bgcolor: isDragActive ? 'primary.main' + '08' : 'background.paper',
+                  bgcolor: isDragActive ? 'primary.main08' : 'background.paper',
                   transition: 'all 0.3s ease',
                   '&:hover': {
-                    bgcolor: 'primary.main' + '04',
+                    bgcolor: 'primary.main04',
                     borderColor: 'primary.main',
                   }
                 }}
