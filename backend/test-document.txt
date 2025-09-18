@@ -1,0 +1,17 @@
+This is a test legal document.
+
+Article 1: Introduction
+This document serves as a test case for the legal document analyzer system.
+
+Article 2: Terms and Conditions
+- The user agrees to the terms of service
+- All data will be processed securely
+- AI analysis will be provided within reasonable time
+
+Article 3: Liability
+The system provides analysis for informational purposes only.
+
+Article 4: Termination
+This agreement can be terminated at any time.
+
+End of document.
